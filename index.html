@@ -10,13 +10,90 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="./styles.css" />
     <script defer src="index.js"></script>
     <title>Document</title>
   </head>
+
   <body>
     <div class="container py-5">
       <h1 class="text-center mb-4">Cats</h1>
+      <div class="d-flex justify-content-center">
+        <button
+          data-openModal="createCat"
+          type="button"
+          class="btn btn-success mb-2"
+        >
+          Add new cat
+        </button>
+      </div>
+      <hr class="mb-5" />
       <div data-wr class="d-flex flex-wrap"></div>
     </div>
+
+    <div data-modalWr class="modal hidden">
+      <div data-modalContent class="modal__content"></div>
+    </div>
+
+    <template id="createCatForm">
+      <h3 class="text-center mb-3">Create new cat</h3>
+      <form name="createCatForm">
+        <div class="mb-3">
+          <input
+            type="number"
+            name="id"
+            placeholder="Id"
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <input
+            type="text"
+            name="name"
+            required
+            placeholder="Name"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <input
+            type="number"
+            name="age"
+            placeholder="Age"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <input
+            type="text"
+            name="image"
+            placeholder="Image url"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <input type="range" name="rate" min="1" max="10" />
+        </div>
+        <div class="mb-3 form-check">
+          <input
+            type="checkbox"
+            name="favorite"
+            class="form-check-input"
+            id="exampleCheck1"
+          />
+          <label class="form-check-label" for="exampleCheck1">favorite</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </template>
   </body>
 </html>
