@@ -13,6 +13,7 @@ const app = async () => {
   const ACTIONS = {
     DETAILS: 'details',
     DELETE: 'delete',
+    CLOSE: 'close',
   };
 
   const CREATE_FORM_LS_KEY = 'CREATE_FORM_LS_KEY';
@@ -55,6 +56,7 @@ const app = async () => {
           <p class="card-text">Age: ${cat.age}.</p>
           <p class="card-text">Rate: ${cat.rate}.</p>
           <p class="card-text">${cat.description}.</p>
+          <button data-actions="close" type="button" class="btn btn-success">Close</button>
       </div>
   </div>
   `;
@@ -65,14 +67,9 @@ const app = async () => {
     });
 
     $wr.addEventListener('click', (e) => {
-      const $catWr = e.target.closest('[data-cat-id]');
-      switch (e.target.dataset.actions) {
-        case ACTIONS.DELETE:
-          deleteCat($catWr);
-          break;
-
-        default:
-          break;
+      if (e.target.dataset.actions === ACTIONS.DELETE) {
+        const $catWr = e.target.closest('[data-cat-id]');
+        deleteCat($catWr);
       }
     });
   };
@@ -173,6 +170,14 @@ const app = async () => {
   };
 
   document.addEventListener('click', openModalHandler);
+
+  document.addEventListener('click', (e) => {
+    if (e.target.dataset.actions === ACTIONS.CLOSE) {
+      $modalWr.classList.add('hidden');
+      $modalWr.removeEventListener('click', clickModalWrHandler);
+      $modalContent.innerHTML = '';
+    }
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
