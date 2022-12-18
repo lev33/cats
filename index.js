@@ -9,11 +9,13 @@ const app = async () => {
   const $modalWr = document.querySelector('[data-modalWr]');
   const $modalContent = document.querySelector('[data-modalContent]');
   const $catCreateFormTemplate = document.getElementById('createCatForm');
+  const $catEditFormTemplate = document.getElementById('editCatForm');
 
   const ACTIONS = {
     DETAILS: 'details',
     DELETE: 'delete',
     CLOSE: 'close',
+    EDIT: 'edit',
   };
 
   const CREATE_FORM_LS_KEY = 'CREATE_FORM_LS_KEY';
@@ -27,8 +29,9 @@ const app = async () => {
       });
       if (response.status === 200) {
         $catWr.remove();
+        state.cats = state.cats.filter((el) => el.id !== +catId);
       } else {
-        throw new Error('Кот не удалился');
+        throw Error('Кот не удалился');
       }
     } catch (error) {
       console.error('Ошибка:', error);
@@ -42,6 +45,7 @@ const app = async () => {
           <h5 class="card-title">${cat.name}</h5>
           <p class="card-text">${cat.description}.</p>
            <button data-actions="${ACTIONS.DETAILS}" data-openModal="showCat" type="button" class="btn btn-primary">Details</button>
+           <button data-actions="${ACTIONS.EDIT}" data-openModal="editCat" type="button" class="btn btn-primary">Edit</button>
            <button data-actions="${ACTIONS.DELETE}" type="button" class="btn btn-danger">Delete</button>
       </div>
   </div>
@@ -79,6 +83,13 @@ const app = async () => {
   const formatCreateFormData = (formDataObject) => ({
     ...formDataObject,
     id: +formDataObject.id,
+    rate: +formDataObject.rate,
+    age: +formDataObject.age,
+    favorite: !!formDataObject.favorite,
+  });
+
+  const formatEditFormData = (formDataObject) => ({
+    ...formDataObject,
     rate: +formDataObject.rate,
     age: +formDataObject.age,
     favorite: !!formDataObject.favorite,
@@ -148,6 +159,53 @@ const app = async () => {
               Object.fromEntries(new FormData($createCatForm).entries()),
             );
             localStorage.setItem(CREATE_FORM_LS_KEY, JSON.stringify(formattedData));
+          });
+
+          break;
+
+        case 'editCat':
+          const cloneCatEditForm = $catEditFormTemplate.content.cloneNode(true);
+          $modalContent.appendChild(cloneCatEditForm);
+          const $catEditWr = e.target.closest('[data-cat-id]');
+          const { catId: id } = $catEditWr.dataset;
+          const catEdit = state.cats.find((el) => el.id === +id);
+
+          const $editCatForm = document.forms.editCatForm;
+          Object.keys(catEdit).forEach((key) => {
+            $editCatForm[key].value = catEdit[key];
+          });
+
+          $editCatForm.addEventListener('submit', (submitEvent) => {
+            submitEvent.preventDefault();
+
+            const formDataObject = formatEditFormData(
+              Object.fromEntries(new FormData(submitEvent.target).entries()),
+            );
+
+            fetch(`https://cats.petiteweb.dev/api/single/lev33/update/${id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ ...formDataObject, name: catEdit.name }),
+            }).then((res) => {
+              if (res.status === 200) {
+                $modalWr.classList.add('hidden');
+                $modalWr.removeEventListener('click', clickModalWrHandler);
+                $modalContent.innerHTML = '';
+
+                state.cats = state.cats.filter((el) => el.id !== +id);
+                const editedCat = { ...catEdit, ...formDataObject };
+                state.cats.push(editedCat);
+                $catEditWr.remove();
+                $wr.insertAdjacentHTML(
+                  'afterbegin',
+                  getCatHTML(editedCat),
+                );
+              } else {
+                throw Error(`Ошибка при обновлении кота ${res.status}`);
+              }
+            }).catch(alert);
           });
 
           break;

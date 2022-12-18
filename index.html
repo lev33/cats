@@ -98,5 +98,60 @@
         </button>
       </form>
     </template>
+
+    <template id="editCatForm">
+      <h3 class="text-center mb-3">Edit cat</h3>
+      <form name="editCatForm">
+        <div class="mb-3 form-age">
+          <label class="form-age-label" for="exampleCheck2">Age</label>
+          <input
+            type="number"
+            name="age"
+            placeholder="Age"
+            class="form-control"
+            id="exampleCheck2"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-description-label" for="exampleCheck3"
+            >Description</label
+          >
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            class="form-control"
+            id="exampleCheck3"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-image-label" for="exampleCheck4">Image url</label>
+          <input
+            type="text"
+            name="image"
+            placeholder="Image url"
+            class="form-control"
+            id="exampleCheck4"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-rate-label" for="exampleCheck5">Rate</label>
+          <input type="range" name="rate" min="1" max="10" id="exampleCheck5" />
+        </div>
+        <div class="mb-3 form-check">
+          <input
+            type="checkbox"
+            name="favorite"
+            class="form-check-input"
+            id="exampleCheck1"
+          />
+          <label class="form-check-label" for="exampleCheck1">favorite</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Edit</button>
+        <button data-actions="close" type="button" class="btn btn-success">
+          Close
+        </button>
+      </form>
+    </template>
   </body>
 </html>
