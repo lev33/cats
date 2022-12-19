@@ -56,10 +56,11 @@ const app = async () => {
        <img src="${cat.image}" class="card-img-top" alt="${cat.name}">
        <div class="card-body">
           <h5 class="card-title">${cat.name}</h5>
-          <h5 class="card-title">Id:  ${cat.id}. Favorite: ${cat.favorite}</h5>
+          <p class="card-text">Id: ${cat.id}.</p>
           <p class="card-text">Age: ${cat.age}.</p>
           <p class="card-text">Rate: ${cat.rate}.</p>
           <p class="card-text">${cat.description}.</p>
+          <p class="card-text">${cat.favorite ? 'Favorite' : 'Is not favorite'}.</p>
           <button data-actions="close" type="button" class="btn btn-success">Close</button>
       </div>
   </div>
@@ -203,7 +204,7 @@ const app = async () => {
                   getCatHTML(editedCat),
                 );
               } else {
-                throw Error(`Ошибка при обновлении кота ${res.status}`);
+                throw Error('Ошибка при обновлении кота');
               }
             }).catch(alert);
           });
